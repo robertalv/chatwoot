@@ -8,7 +8,6 @@
     </span>
     <contact-info
       :show-avatar="showAvatar"
-      show-new-message
       :contact="contact"
       @panel-close="onClose"
     />
@@ -157,6 +156,12 @@ export default {
   overflow: auto;
   position: relative;
   border-right: 1px solid var(--color-border);
+}
+
+.list-group {
+  .list-group-item {
+    background-color: var(--white);
+  }
 }
 
 .close-button {

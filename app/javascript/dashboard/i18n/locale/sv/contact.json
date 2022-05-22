@@ -70,6 +70,14 @@
     "SUCCESS_MESSAGE": "Kontakter har sparats",
     "ERROR_MESSAGE": "Ett fel uppstod, vänligen försök igen"
   },
+  "DELETE_NOTE": {
+    "CONFIRM": {
+      "TITLE": "Bekräfta borttagning",
+      "MESSAGE": "Are you want sure to delete this note?",
+      "YES": "Yes, Delete it",
+      "NO": "Nej, behåll"
+    }
+  },
   "DELETE_CONTACT": {
     "BUTTON_LABEL": "Ta bort kontakt",
     "TITLE": "Ta bort kontakt",
@@ -77,9 +85,8 @@
     "CONFIRM": {
       "TITLE": "Bekräfta borttagning",
       "MESSAGE": "Är du säker på att ta bort ",
-      "PLACE_HOLDER": "Vänligen skriv {contactName} för att bekräfta",
-      "YES": "Ja, ta bort ",
-      "NO": "Nej, behåll "
+      "YES": "Ja, ta bort",
+      "NO": "Nej, behåll"
     },
     "API": {
       "SUCCESS_MESSAGE": "Kontakten har tagits bort",
@@ -169,6 +176,7 @@
       "SUBMIT": "Skicka meddelande",
       "CANCEL": "Avbryt",
       "SUCCESS_MESSAGE": "Message sent!",
+      "GO_TO_CONVERSATION": "Visa",
       "ERROR_MESSAGE": "Couldn't send! try again"
     }
   },
@@ -178,6 +186,8 @@
     "SEARCH_BUTTON": "Sök",
     "SEARCH_INPUT_PLACEHOLDER": "Sök kontakter",
     "FILTER_CONTACTS": "Filter",
+    "FILTER_CONTACTS_SAVE": "Save filter",
+    "FILTER_CONTACTS_DELETE": "Delete filter",
     "LIST": {
       "LOADING_MESSAGE": "Laddar kontakter...",
       "404": "Inga kontakter matchar din sökning 🔍",

@@ -70,6 +70,14 @@
     "SUCCESS_MESSAGE": "Contacts saved successfully",
     "ERROR_MESSAGE": "There was an error, please try again"
   },
+  "DELETE_NOTE": {
+    "CONFIRM": {
+      "TITLE": "நீக்குதலை உறுதிப்படுத்தவும்",
+      "MESSAGE": "Are you want sure to delete this note?",
+      "YES": "Yes, Delete it",
+      "NO": "இல்லை, அதை வைத்திரு"
+    }
+  },
   "DELETE_CONTACT": {
     "BUTTON_LABEL": "Delete Contact",
     "TITLE": "Delete contact",
@@ -77,9 +85,8 @@
     "CONFIRM": {
       "TITLE": "நீக்குதலை உறுதிப்படுத்தவும்",
       "MESSAGE": "நீக்குவதில் உறுதியாக உள்ளீர்களா ",
-      "PLACE_HOLDER": "Please type {contactName} to confirm",
-      "YES": "ஆம், நீக்கு ",
-      "NO": "இல்லை, வைத்திரு "
+      "YES": "Yes, Delete",
+      "NO": "No, Keep"
     },
     "API": {
       "SUCCESS_MESSAGE": "Contact deleted successfully",
@@ -169,6 +176,7 @@
       "SUBMIT": "Send message",
       "CANCEL": "ரத்துசெய்",
       "SUCCESS_MESSAGE": "Message sent!",
+      "GO_TO_CONVERSATION": "காண்க",
       "ERROR_MESSAGE": "Couldn't send! try again"
     }
   },
@@ -178,6 +186,8 @@
     "SEARCH_BUTTON": "Search",
     "SEARCH_INPUT_PLACEHOLDER": "Search for contacts",
     "FILTER_CONTACTS": "வடிகட்டவும்",
+    "FILTER_CONTACTS_SAVE": "Save filter",
+    "FILTER_CONTACTS_DELETE": "Delete filter",
     "LIST": {
       "LOADING_MESSAGE": "Loading contacts...",
       "404": "No contacts matches your search 🔍",

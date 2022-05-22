@@ -34,6 +34,7 @@
       window.chatwootConfig = {
         hostURL: '<%= ENV.fetch('FRONTEND_URL', '') %>',
         fbAppId: '<%= ENV.fetch('FB_APP_ID', nil) %>',
+        fbApiVersion: '<%= @global_config['FACEBOOK_API_VERSION'] %>',
         signupEnabled: '<%= @global_config['ENABLE_ACCOUNT_SIGNUP'] %>',
         <% if @global_config['VAPID_PUBLIC_KEY'] %>
         vapidPublicKey: new Uint8Array(<%= Base64.urlsafe_decode64(@global_config['VAPID_PUBLIC_KEY']).bytes %>),
@@ -67,7 +68,7 @@
     <script>
       window.chatwootSettings = { hideMessageBubble: true, position: 'left' };
       (function(d,t) {
-        var BASE_URL="https://app.chatwoot.com";
+        var BASE_URL='<%= ENV.fetch('FRONTEND_URL', 'https://app.chatwoot.com') %>';
         var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
         g.src=BASE_URL+"/packs/js/sdk.js"; g.defer=true; g.async=true;
         s.parentNode.insertBefore(g,s);

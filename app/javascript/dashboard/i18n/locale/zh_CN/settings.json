@@ -19,6 +19,18 @@
         "TITLE": "个人信息",
         "NOTE": "您的电子邮件地址是您的身份并用于登录。"
       },
+      "MESSAGE_SIGNATURE_SECTION": {
+        "TITLE": "Personal message signature",
+        "NOTE": "Create a personal message signature that would be added to all the messages you send from the platform. Use the rich content editor to create a highly personalised signature.",
+        "BTN_TEXT": "Save message signature",
+        "API_ERROR": "Couldn't save signature! Try again",
+        "API_SUCCESS": "Signature saved successfully"
+      },
+      "MESSAGE_SIGNATURE": {
+        "LABEL": "Message Signature",
+        "ERROR": "Message Signature cannot be empty",
+        "PLACEHOLDER": "Insert your personal message signature here."
+      },
       "PASSWORD_SECTION": {
         "TITLE": "密码",
         "NOTE": "更新您的密码会在多个设备中重置您的登录信息。",
@@ -89,14 +101,14 @@
         "PLACEHOLDER": "Please enter the current password"
       },
       "PASSWORD": {
-        "LABEL": "密码",
+        "LABEL": "New password",
         "ERROR": "请输入长度6或更长的密码",
         "PLACEHOLDER": "请输入新密码"
       },
       "PASSWORD_CONFIRMATION": {
         "LABEL": "重新输入一次密码",
         "ERROR": "两次密码不一致",
-        "PLACEHOLDER": "请重新输入密码"
+        "PLACEHOLDER": "Please re-enter your new password"
       }
     }
   },
@@ -119,6 +131,10 @@
       "BUTTON_TEXT": "复制",
       "COPY_SUCCESSFUL": "代码复制到剪贴板成功"
     },
+    "SHOW_MORE_BLOCK": {
+      "SHOW_MORE": "Show More",
+      "SHOW_LESS": "Show Less"
+    },
     "FILE_BUBBLE": {
       "DOWNLOAD": "下载",
       "UPLOADING": "上传中..."
@@ -134,9 +150,11 @@
     }
   },
   "SIDEBAR": {
+    "CURRENTLY_VIEWING_ACCOUNT": "Currently viewing:",
+    "SWITCH": "Switch",
     "CONVERSATIONS": "会话",
     "ALL_CONVERSATIONS": "All Conversations",
-    "MENTIONED_CONVERSATIONS": "Mentions",
+    "MENTIONED_CONVERSATIONS": "提及",
     "REPORTS": "报告",
     "SETTINGS": "设置",
     "CONTACTS": "Contacts",
@@ -153,12 +171,14 @@
     "CUSTOM_ATTRIBUTES": "自定义属性",
     "AUTOMATION": "Automation",
     "TEAMS": "Teams",
+    "CUSTOM_VIEWS_FOLDER": "Folders",
+    "CUSTOM_VIEWS_SEGMENTS": "Segments",
     "ALL_CONTACTS": "All Contacts",
     "TAGGED_WITH": "Tagged with",
     "NEW_LABEL": "New label",
     "NEW_TEAM": "New team",
     "NEW_INBOX": "New inbox",
-    "REPORTS_OVERVIEW": "Overview",
+    "REPORTS_CONVERSATION": "会话",
     "CSAT": "CSAT",
     "CAMPAIGNS": "Campaigns",
     "ONGOING": "Ongoing",
@@ -167,7 +187,9 @@
     "REPORTS_LABEL": "标签",
     "REPORTS_INBOX": "Inbox",
     "REPORTS_TEAM": "Team",
-    "SET_AVAILABILITY_TITLE": "Set yourself as"
+    "SET_AVAILABILITY_TITLE": "Set yourself as",
+    "BETA": "Beta",
+    "REPORTS_OVERVIEW": "Overview"
   },
   "CREATE_ACCOUNT": {
     "NO_ACCOUNT_WARNING": "Uh oh! We could not find any Chatwoot accounts. Please create a new account to continue.",
