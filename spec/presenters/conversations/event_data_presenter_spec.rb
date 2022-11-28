@@ -13,10 +13,12 @@ RSpec.describe Conversations::EventDataPresenter do
         meta: {
           sender: conversation.contact.push_event_data,
           assignee: conversation.assignee,
+          team: conversation.team,
           hmac_verified: conversation.contact_inbox.hmac_verified
         },
         id: conversation.display_id,
         messages: [],
+        labels: [],
         inbox_id: conversation.inbox_id,
         status: conversation.status,
         contact_inbox: conversation.contact_inbox,

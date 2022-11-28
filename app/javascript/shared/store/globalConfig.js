@@ -4,6 +4,7 @@ const {
   APP_VERSION: appVersion,
   BRAND_NAME: brandName,
   CHATWOOT_INBOX_TOKEN: chatwootInboxToken,
+  CSML_EDITOR_HOST: csmlEditorHost,
   CREATE_NEW_ACCOUNT_FROM_DASHBOARD: createNewAccountFromDashboard,
   DIRECT_UPLOADS_ENABLED: directUploadsEnabled,
   DISPLAY_MANIFEST: displayManifest,
@@ -15,6 +16,7 @@ const {
   TERMS_URL: termsURL,
   WIDGET_BRAND_URL: widgetBrandURL,
   DISABLE_USER_PROFILE_UPDATE: disableUserProfileUpdate,
+  DEPLOYMENT_ENV: deploymentEnv,
 } = window.globalConfig || {};
 
 const state = {
@@ -23,6 +25,8 @@ const state = {
   appVersion,
   brandName,
   chatwootInboxToken,
+  csmlEditorHost,
+  deploymentEnv,
   createNewAccountFromDashboard,
   directUploadsEnabled: directUploadsEnabled === 'true',
   disableUserProfileUpdate: disableUserProfileUpdate === 'true',
@@ -38,6 +42,8 @@ const state = {
 
 export const getters = {
   get: $state => $state,
+  isOnChatwootCloud: $state => $state.deploymentEnv === 'cloud',
+  isACustomBrandedInstance: $state => $state.installationName !== 'Chatwoot',
 };
 
 export const actions = {};

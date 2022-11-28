@@ -1,19 +1,11 @@
 <template>
   <div class="view-box fill-height">
     <banner
-      v-if="!currentChat.can_reply && !isAWhatsappChannel"
+      v-if="!currentChat.can_reply"
       color-scheme="alert"
-      :banner-message="$t('CONVERSATION.CANNOT_REPLY')"
-      :href-link="facebookReplyPolicy"
-      :href-link-text="$t('CONVERSATION.24_HOURS_WINDOW')"
-    />
-
-    <banner
-      v-if="!currentChat.can_reply && isAWhatsappChannel"
-      color-scheme="alert"
-      :banner-message="$t('CONVERSATION.TWILIO_WHATSAPP_CAN_REPLY')"
-      :href-link="twilioWhatsAppReplyPolicy"
-      :href-link-text="$t('CONVERSATION.TWILIO_WHATSAPP_24_HOURS_WINDOW')"
+      :banner-message="replyWindowBannerMessage"
+      :href-link="replyWindowLink"
+      :href-link-text="replyWindowLinkText"
     />
 
     <banner
@@ -32,8 +24,7 @@
         class="sidebar-toggle--button"
         :icon="isRightOrLeftIcon"
         @click="onToggleContactPanel"
-      >
-      </woot-button>
+      />
     </div>
     <ul class="conversation-panel">
       <transition name="slide-up">
@@ -44,7 +35,7 @@
       <message
         v-for="message in getReadMessages"
         :key="message.id"
-        class="message--read"
+        class="message--read ph-no-capture"
         :data="message"
         :is-a-tweet="isATweet"
         :has-instagram-story="hasInstagramStory"
@@ -53,11 +44,11 @@
         "
         :is-web-widget-inbox="isAWebWidgetInbox"
       />
-      <li v-show="getUnreadCount != 0" class="unread--toast">
+      <li v-show="unreadMessageCount != 0" class="unread--toast">
         <span class="text-uppercase">
-          {{ getUnreadCount }}
+          {{ unreadMessageCount }}
           {{
-            getUnreadCount > 1
+            unreadMessageCount > 1
               ? $t('CONVERSATION.UNREAD_MESSAGES')
               : $t('CONVERSATION.UNREAD_MESSAGE')
           }}
@@ -66,7 +57,7 @@
       <message
         v-for="message in getUnReadMessages"
         :key="message.id"
-        class="message--unread"
+        class="message--unread ph-no-capture"
         :data="message"
         :is-a-tweet="isATweet"
         :has-instagram-story="hasInstagramStory"
@@ -96,7 +87,6 @@
         :selected-tweet="selectedTweet"
         :popout-reply-box.sync="isPopoutReplyBox"
         @click="showPopoutReplyBox"
-        @scrollToMessage="scrollToBottom"
       />
     </div>
   </div>
@@ -147,9 +137,7 @@ export default {
       allConversations: 'getAllConversations',
       inboxesList: 'inboxes/getInboxes',
       listLoadingStatus: 'getAllMessagesLoaded',
-      getUnreadCount: 'getUnreadCount',
       loadingChatList: 'getChatListLoadingStatus',
-      conversationLastSeen: 'getConversationLastSeen',
     }),
     inboxId() {
       return this.currentChat.inbox_id;
@@ -160,7 +148,6 @@ export default {
     hasSelectedTweetId() {
       return !!this.selectedTweetId;
     },
-
     tweetBannerText() {
       return !this.selectedTweetId
         ? this.$t('CONVERSATION.SELECT_A_TWEET_TO_REPLY')
@@ -238,12 +225,6 @@ export default {
       }
       return '';
     },
-    facebookReplyPolicy() {
-      return REPLY_POLICY.FACEBOOK;
-    },
-    twilioWhatsAppReplyPolicy() {
-      return REPLY_POLICY.TWILIO_WHATSAPP;
-    },
     isRightOrLeftIcon() {
       if (this.isContactPanelOpen) {
         return 'arrow-chevron-right';
@@ -251,9 +232,46 @@ export default {
       return 'arrow-chevron-left';
     },
     getLastSeenAt() {
-      if (this.conversationLastSeen) return this.conversationLastSeen;
       const { contact_last_seen_at: contactLastSeenAt } = this.currentChat;
       return contactLastSeenAt;
+    },
+
+    replyWindowBannerMessage() {
+      if (this.isAWhatsAppChannel) {
+        return this.$t('CONVERSATION.TWILIO_WHATSAPP_CAN_REPLY');
+      }
+      if (this.isAPIInbox) {
+        const { additional_attributes: additionalAttributes = {} } = this.inbox;
+        if (additionalAttributes) {
+          const {
+            agent_reply_time_window_message: agentReplyTimeWindowMessage,
+          } = additionalAttributes;
+          return agentReplyTimeWindowMessage;
+        }
+        return '';
+      }
+      return this.$t('CONVERSATION.CANNOT_REPLY');
+    },
+    replyWindowLink() {
+      if (this.isAWhatsAppChannel) {
+        return REPLY_POLICY.FACEBOOK;
+      }
+      if (!this.isAPIInbox) {
+        return REPLY_POLICY.TWILIO_WHATSAPP;
+      }
+      return '';
+    },
+    replyWindowLinkText() {
+      if (this.isAWhatsAppChannel) {
+        return this.$t('CONVERSATION.24_HOURS_WINDOW');
+      }
+      if (!this.isAPIInbox) {
+        return this.$t('CONVERSATION.TWILIO_WHATSAPP_24_HOURS_WINDOW');
+      }
+      return '';
+    },
+    unreadMessageCount() {
+      return this.currentChat.unread_count;
     },
   },
 
@@ -315,7 +333,7 @@ export default {
     },
     scrollToBottom() {
       let relevantMessages = [];
-      if (this.getUnreadCount > 0) {
+      if (this.unreadMessageCount > 0) {
         // capturing only the unread messages
         relevantMessages = this.conversationPanel.querySelectorAll(
           '.message--unread'
@@ -413,12 +431,12 @@ export default {
       position: fixed;
       left: unset;
       position: absolute;
-    }
 
-    .emoji-dialog::before {
-      transform: rotate(0deg);
-      left: 5px;
-      bottom: var(--space-minus-slab);
+      &::before {
+        transform: rotate(0deg);
+        left: var(--space-smaller);
+        bottom: var(--space-minus-slab);
+      }
     }
   }
 }

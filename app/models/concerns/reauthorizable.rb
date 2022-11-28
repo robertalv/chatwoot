@@ -29,7 +29,9 @@ module Reauthorizable
   # Implement in your exception handling logic for authorization errors
   def authorization_error!
     ::Redis::Alfred.incr(authorization_error_count_key)
-    prompt_reauthorization! if authorization_error_count >= AUTHORIZATION_ERROR_THRESHOLD
+    # we are giving precendence to the authorization error threshhold defined in the class
+    # so that channels can override the default value
+    prompt_reauthorization! if authorization_error_count >= self.class::AUTHORIZATION_ERROR_THRESHOLD
   end
 
   # Performed automatically if error threshold is breached
@@ -37,11 +39,14 @@ module Reauthorizable
   def prompt_reauthorization!
     ::Redis::Alfred.set(reauthorization_required_key, true)
 
-    if (is_a? Integrations::Hook) && slack?
-      AdministratorNotifications::ChannelNotificationsMailer.with(account: account).slack_disconnect.deliver_later
-    elsif is_a? Channel::FacebookPage
+    case self.class.name
+    when 'Integrations::Hook'
+      AdministratorNotifications::ChannelNotificationsMailer.with(account: account).slack_disconnect.deliver_later if slack?
+    when 'Channel::FacebookPage'
       AdministratorNotifications::ChannelNotificationsMailer.with(account: account).facebook_disconnect(inbox).deliver_later
-    elsif is_a? Channel::Email
+    when 'Channel::Whatsapp'
+      AdministratorNotifications::ChannelNotificationsMailer.with(account: account).whatsapp_disconnect(inbox).deliver_later
+    when 'Channel::Email'
       AdministratorNotifications::ChannelNotificationsMailer.with(account: account).email_disconnect(inbox).deliver_later
     end
   end

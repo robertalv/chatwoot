@@ -220,7 +220,7 @@ RSpec.describe 'Conversations API', type: :request do
     end
 
     context 'when it is an authenticated user' do
-      let(:agent) { create(:user, account: account, role: :agent) }
+      let(:agent) { create(:user, account: account, role: :agent, auto_offline: false) }
       let(:team) { create(:team, account: account) }
 
       it 'will not create a new conversation if agent does not have access to inbox' do
@@ -265,17 +265,18 @@ RSpec.describe 'Conversations API', type: :request do
 
         # TODO: remove this spec when we remove the condition check in controller
         # Added for backwards compatibility for bot status
-        it 'creates a conversation as pending if status is specified as bot' do
-          allow(Rails.configuration.dispatcher).to receive(:dispatch)
-          post "/api/v1/accounts/#{account.id}/conversations",
-               headers: agent.create_new_auth_token,
-               params: { source_id: contact_inbox.source_id, status: 'bot' },
-               as: :json
+        # remove this in subsequent release
+        # it 'creates a conversation as pending if status is specified as bot' do
+        #   allow(Rails.configuration.dispatcher).to receive(:dispatch)
+        #   post "/api/v1/accounts/#{account.id}/conversations",
+        #        headers: agent.create_new_auth_token,
+        #        params: { source_id: contact_inbox.source_id, status: 'bot' },
+        #        as: :json
 
-          expect(response).to have_http_status(:success)
-          response_data = JSON.parse(response.body, symbolize_names: true)
-          expect(response_data[:status]).to eq('pending')
-        end
+        #   expect(response).to have_http_status(:success)
+        #   response_data = JSON.parse(response.body, symbolize_names: true)
+        #   expect(response_data[:status]).to eq('pending')
+        # end
 
         it 'creates a new conversation with message when message is passed' do
           allow(Rails.configuration.dispatcher).to receive(:dispatch)
@@ -408,17 +409,18 @@ RSpec.describe 'Conversations API', type: :request do
 
       # TODO: remove this spec when we remove the condition check in controller
       # Added for backwards compatibility for bot status
-      it 'toggles the conversation status to pending status when parameter bot is passed' do
-        expect(conversation.status).to eq('open')
+      # remove in next release
+      # it 'toggles the conversation status to pending status when parameter bot is passed' do
+      #   expect(conversation.status).to eq('open')
 
-        post "/api/v1/accounts/#{account.id}/conversations/#{conversation.display_id}/toggle_status",
-             headers: agent.create_new_auth_token,
-             params: { status: 'bot' },
-             as: :json
+      #   post "/api/v1/accounts/#{account.id}/conversations/#{conversation.display_id}/toggle_status",
+      #        headers: agent.create_new_auth_token,
+      #        params: { status: 'bot' },
+      #        as: :json
 
-        expect(response).to have_http_status(:success)
-        expect(conversation.reload.status).to eq('pending')
-      end
+      #   expect(response).to have_http_status(:success)
+      #   expect(conversation.reload.status).to eq('pending')
+      # end
     end
   end
 
@@ -490,20 +492,52 @@ RSpec.describe 'Conversations API', type: :request do
              as: :json
 
         expect(response).to have_http_status(:success)
-        expect(conversation.reload.agent_last_seen_at).not_to eq nil
+        expect(conversation.reload.agent_last_seen_at).not_to be_nil
       end
 
       it 'updates assignee last seen' do
         conversation.update!(assignee_id: agent.id)
 
-        expect(conversation.reload.assignee_last_seen_at).to eq nil
+        expect(conversation.reload.assignee_last_seen_at).to be_nil
 
         post "/api/v1/accounts/#{account.id}/conversations/#{conversation.display_id}/update_last_seen",
              headers: agent.create_new_auth_token,
              as: :json
 
         expect(response).to have_http_status(:success)
-        expect(conversation.reload.assignee_last_seen_at).not_to eq nil
+        expect(conversation.reload.assignee_last_seen_at).not_to be_nil
+      end
+    end
+  end
+
+  describe 'POST /api/v1/accounts/{account.id}/conversations/:id/unread' do
+    let(:conversation) { create(:conversation, account: account) }
+
+    context 'when it is an unauthenticated user' do
+      it 'returns unauthorized' do
+        post "/api/v1/accounts/#{account.id}/conversations/#{conversation.display_id}/unread"
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when it is an authenticated user' do
+      let(:agent) { create(:user, account: account, role: :agent) }
+
+      before do
+        create(:inbox_member, user: agent, inbox: conversation.inbox)
+        create(:message, conversation: conversation, account: account, inbox: conversation.inbox, content: 'Hello', message_type: 'incoming')
+      end
+
+      it 'updates last seen' do
+        post "/api/v1/accounts/#{account.id}/conversations/#{conversation.display_id}/unread",
+             headers: agent.create_new_auth_token,
+             as: :json
+
+        expect(response).to have_http_status(:success)
+        last_seen_at = conversation.messages.incoming.last.created_at - 1.second
+        expect(conversation.reload.agent_last_seen_at).to eq(last_seen_at)
+        expect(conversation.reload.assignee_last_seen_at).to eq(last_seen_at)
       end
     end
   end
@@ -532,8 +566,8 @@ RSpec.describe 'Conversations API', type: :request do
              as: :json
 
         expect(response).to have_http_status(:success)
-        expect(conversation.reload.resolved?).to eq(true)
-        expect(conversation.reload.muted?).to eq(true)
+        expect(conversation.reload.resolved?).to be(true)
+        expect(conversation.reload.muted?).to be(true)
       end
     end
   end
@@ -562,7 +596,7 @@ RSpec.describe 'Conversations API', type: :request do
              as: :json
 
         expect(response).to have_http_status(:success)
-        expect(conversation.reload.muted?).to eq(false)
+        expect(conversation.reload.muted?).to be(false)
       end
     end
   end
@@ -636,7 +670,7 @@ RSpec.describe 'Conversations API', type: :request do
              as: :json
 
         expect(response).to have_http_status(:success)
-        expect(conversation.reload.custom_attributes).not_to eq nil
+        expect(conversation.reload.custom_attributes).not_to be_nil
         expect(conversation.reload.custom_attributes.count).to eq 3
       end
     end

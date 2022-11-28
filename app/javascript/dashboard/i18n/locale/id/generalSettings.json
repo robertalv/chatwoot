@@ -48,19 +48,20 @@
       }
     },
     "UPDATE_CHATWOOT": "Pembaharuan Chatwoot %{latestChatwootVersion} telah tersedia. Silahkan lakukan pembaharuan instance Anda.",
-    "LEARN_MORE": "Learn more"
+    "LEARN_MORE": "Pelajari lebih lanjut"
   },
   "FORMS": {
     "MULTISELECT": {
       "ENTER_TO_SELECT": "Tekan enter untuk memilih",
       "ENTER_TO_REMOVE": "Tekan enter untuk menghapus",
-      "SELECT_ONE": "Pilih satu"
+      "SELECT_ONE": "Pilih satu",
+      "SELECT": "Select"
     }
   },
   "NOTIFICATIONS_PAGE": {
     "HEADER": "Notifikasi",
     "MARK_ALL_DONE": "Tandai Semua Selesai",
-    "DELETE_TITLE": "deleted",
+    "DELETE_TITLE": "terhapus",
     "UNREAD_NOTIFICATION": {
       "TITLE": "Unread Notifications",
       "ALL_NOTIFICATIONS": "View all notifications",
@@ -136,5 +137,8 @@
       "UNTIL_NEXT_WEEK": "Until next week",
       "UNTIL_TOMORROW": "Until tomorrow"
     }
+  },
+  "DASHBOARD_APPS": {
+    "LOADING_MESSAGE": "Loading Dashboard App..."
   }
 }
